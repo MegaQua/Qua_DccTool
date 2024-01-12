@@ -1,0 +1,14 @@
+{
+    "select asset":[
+        ""
+    ],
+    "ch0000_00_00_Musashi:":["ch0000_00_00_Musashi:m_eye",
+    "ch0000_00_00_Musashi:m_eyebrow",
+    "ch0000_00_00_Musashi:m_mouth",
+    "ch0000_00_00_Musashi:m_D_matuge",
+    "ch0000_00_00_Musashi:m_U_matuge",
+    "ch0000_00_00_Musashi:m_Face",
+    "ch0000_00_00_Musashi:m_HairBase",
+    "ch0000_00_00_Musashi:m_Hair"
+    ]
+}

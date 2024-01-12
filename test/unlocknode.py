@@ -1,0 +1,1 @@
+cmds.lockNode("pSphere1", lock =True)

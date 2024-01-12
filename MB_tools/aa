@@ -1,0 +1,634 @@
+class FBCharacter(FBConstraint)
+ |  Method resolution order:
+ |      FBCharacter
+ |      FBConstraint
+ |      FBBox
+ |      FBComponent
+ |      FBPlug
+ |      FBPythonWrapper
+ |      Boost.Python.instance
+ |      builtins.object
+ |
+ |  Static methods defined here:
+ |
+ |  AddCharacterExtension(...)
+ |      AddCharacterExtension( (FBCharacter)arg1, (FBCharacterExtension)arg2) -> None
+ |
+ |  Clone(...)
+ |      Clone( (FBCharacter)arg1) -> object
+ |
+ |  ConnectControlRig(...)
+ |      ConnectControlRig( (FBCharacter)arg1, (FBControlSet)arg2, (object)arg3, (object)arg4) -> None
+ |
+ |  CopyAnimation(...)
+ |      CopyAnimation( (FBCharacter)arg1) -> None
+ |
+ |  CreateAuxiliary(...)
+ |      CreateAuxiliary( (FBCharacter)arg1, (FBEffectorId)arg2, (object)arg3 [, (object)arg4 [, (object)arg5]]) -> bool
+ |
+ |  CreateCharacterMarkerSet(...)
+ |      CreateCharacterMarkerSet( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  CreateControlRig(...)
+ |      CreateControlRig( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  CycleAnalysisCurrentCharacter(...)
+ |      CycleAnalysisCurrentCharacter( (FBCharacter)arg1) -> None
+ |
+ |  DisconnectControlRig(...)
+ |      DisconnectControlRig( (FBCharacter)arg1) -> None
+ |
+ |  FBDelete(...)
+ |      FBDelete( (FBCharacter)arg1) -> None
+ |
+ |  GetActiveBodyPart(...)
+ |      GetActiveBodyPart( (FBCharacter)arg1) -> list
+ |
+ |  GetCharacterMarkerSet(...)
+ |      GetCharacterMarkerSet( (FBCharacter)arg1, (object)arg2) -> object
+ |
+ |  GetCharacterize(...)
+ |      GetCharacterize( (FBCharacter)arg1) -> bool
+ |
+ |  GetCharacterizeError(...)
+ |      GetCharacterizeError( (FBCharacter)arg1) -> str
+ |
+ |  GetCtrlRigModel(...)
+ |      GetCtrlRigModel( (FBCharacter)arg1, (FBBodyNodeId)arg2) -> object
+ |
+ |  GetCurrentControlSet(...)
+ |      GetCurrentControlSet( (FBCharacter)arg1) -> object
+ |
+ |  GetCycleAnalysisNode(...)
+ |      GetCycleAnalysisNode( (FBCharacter)arg1) -> object
+ |
+ |  GetEffectorModel(...)
+ |      GetEffectorModel( (FBCharacter)arg1, (FBEffectorId)arg2 [, (FBEffectorSetID)arg3]) -> object
+ |
+ |  GetExternalSolver(...)
+ |      GetExternalSolver( (FBCharacter)arg1) -> object
+ |
+ |  GetFKVisibility(...)
+ |      GetFKVisibility( (FBCharacter)arg1) -> FBVisibilityState
+ |
+ |  GetFloorContactModel(...)
+ |      GetFloorContactModel( (FBCharacter)arg1, (FBFloorContactID)arg2) -> object
+ |
+ |  GetGoalModel(...)
+ |      GetGoalModel( (FBCharacter)arg1, (FBBodyNodeId)arg2) -> object
+ |
+ |  GetIKVisibility(...)
+ |      GetIKVisibility( (FBCharacter)arg1) -> FBVisibilityState
+ |
+ |  GetIndexByModel(...)
+ |      GetIndexByModel( (FBCharacter)arg1, (FBModelSkeleton)arg2) -> FBBodyNodeId
+ |
+ |  GetModel(...)
+ |      GetModel( (FBCharacter)arg1, (FBBodyNodeId)arg2) -> object
+ |
+ |  GetParentROffset(...)
+ |      GetParentROffset( (FBCharacter)arg1, (FBBodyNodeId)arg2, (FBVector3d)arg3) -> None
+ |
+ |  GetROffset(...)
+ |      GetROffset( (FBCharacter)arg1, (FBBodyNodeId)arg2, (FBVector3d)arg3) -> None
+ |
+ |  GetSOffset(...)
+ |      GetSOffset( (FBCharacter)arg1, (FBBodyNodeId)arg2, (FBVector3d)arg3) -> None
+ |
+ |  GetSkeletonVisibility(...)
+ |      GetSkeletonVisibility( (FBCharacter)arg1) -> FBVisibilityState
+ |
+ |  GetSkinModelList(...)
+ |      GetSkinModelList( (FBCharacter)arg1, (FBModelList)arg2) -> None
+ |
+ |  GetTOffset(...)
+ |      GetTOffset( (FBCharacter)arg1, (FBBodyNodeId)arg2, (FBVector4d)arg3) -> None
+ |
+ |  GetTransformOffset(...)
+ |      GetTransformOffset( (FBCharacter)arg1, (FBBodyNodeId)arg2, (FBMatrix)arg3) -> None
+ |
+ |  GoToStancePose(...)
+ |      GoToStancePose( (FBCharacter)arg1 [, (object)arg2 [, (object)arg3]]) -> None
+ |
+ |  IsParentNodeOffset(...)
+ |      IsParentNodeOffset( (FBCharacter)arg1, (FBBodyNodeId)arg2) -> bool
+ |
+ |  IsRotationPin(...)
+ |      IsRotationPin( (FBCharacter)arg1, (FBEffectorId)arg2) -> bool
+ |
+ |  IsTranslationPin(...)
+ |      IsTranslationPin( (FBCharacter)arg1, (FBEffectorId)arg2) -> bool
+ |
+ |  PlotAnimation(...)
+ |      PlotAnimation( (FBCharacter)arg1, (FBCharacterPlotWhere)arg2, (FBPlotOptions)arg3) -> bool
+ |
+ |  ReadyForRetarget(...)
+ |      ReadyForRetarget( (FBCharacter)arg1) -> bool
+ |
+ |  RemoveCharacterExtension(...)
+ |      RemoveCharacterExtension( (FBCharacter)arg1, (FBCharacterExtension)arg2) -> None
+ |
+ |  ResetProperties(...)
+ |      ResetProperties( (FBCharacter)arg1, (FBCharacterResetProperties)arg2) -> None
+ |
+ |  Retarget(...)
+ |      Retarget( (FBCharacter)arg1, (object)arg2) -> None
+ |
+ |  SelectModels(...)
+ |      SelectModels( (FBCharacter)arg1, (object)arg2, (object)arg3, (object)arg4, (object)arg5) -> None
+ |
+ |  SetCharacterizeOff(...)
+ |      SetCharacterizeOff( (FBCharacter)arg1) -> None
+ |
+ |  SetCharacterizeOn(...)
+ |      SetCharacterizeOn( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  SetExternalSolver(...)
+ |      SetExternalSolver( (FBCharacter)arg1, (FBCharacterSolver)arg2) -> None
+ |
+ |  SetExternalSolverWithIndex(...)
+ |      SetExternalSolverWithIndex( (FBCharacter)arg1, (object)arg2) -> None
+ |
+ |  SetFKVisibility(...)
+ |      SetFKVisibility( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  SetIKVisibility(...)
+ |      SetIKVisibility( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  SetRotationPin(...)
+ |      SetRotationPin( (FBCharacter)arg1, (FBEffectorId)arg2, (object)arg3) -> bool
+ |
+ |  SetSkeletonVisibility(...)
+ |      SetSkeletonVisibility( (FBCharacter)arg1, (object)arg2) -> bool
+ |
+ |  SetTranslationPin(...)
+ |      SetTranslationPin( (FBCharacter)arg1, (FBEffectorId)arg2, (object)arg3) -> bool
+ |
+ |  __init__(...)
+ |      __init__( (object)arg1, (str)arg2) -> None
+ |
+ |  __reduce__ = <unnamed Boost.Python function>(...)
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors defined here:
+ |
+ |  ActiveInput
+ |
+ |  CharacterExtensions
+ |
+ |  ContactBehaviour
+ |
+ |  FKFingerMultiplier
+ |
+ |  FKFingerTipMultiplier
+ |
+ |  FKThumbTipMultiplier
+ |
+ |  HipsTranslationMode
+ |
+ |  HumanFingerLimits
+ |
+ |  InputActor
+ |
+ |  InputCharacter
+ |
+ |  InputType
+ |
+ |  InverseLeftElbow
+ |
+ |  InverseLeftKnee
+ |
+ |  InverseRightElbow
+ |
+ |  InverseRightKnee
+ |
+ |  KeyingMode
+ |
+ |  LeftElbowKillPitch
+ |
+ |  LeftHandIndexIndex
+ |
+ |  LeftHandIndexMiddle
+ |
+ |  LeftHandIndexPinky
+ |
+ |  LeftHandIndexRing
+ |
+ |  LeftHandMiddleIndex
+ |
+ |  LeftHandMiddleMiddle
+ |
+ |  LeftHandMiddlePinky
+ |
+ |  LeftHandMiddleRing
+ |
+ |  LeftHandPinkyIndex
+ |
+ |  LeftHandPinkyMiddle
+ |
+ |  LeftHandPinkyPinky
+ |
+ |  LeftHandPinkyRing
+ |
+ |  LeftHandRingIndex
+ |
+ |  LeftHandRingMiddle
+ |
+ |  LeftHandRingPinky
+ |
+ |  LeftHandRingRing
+ |
+ |  LeftKneeKillPitch
+ |
+ |  LockX
+ |
+ |  LockY
+ |
+ |  LockZ
+ |
+ |  MirrorMode
+ |
+ |  RightElbowKillPitch
+ |
+ |  RightHandIndexIndex
+ |
+ |  RightHandIndexMiddle
+ |
+ |  RightHandIndexPinky
+ |
+ |  RightHandIndexRing
+ |
+ |  RightHandMiddleIndex
+ |
+ |  RightHandMiddleMiddle
+ |
+ |  RightHandMiddlePinky
+ |
+ |  RightHandMiddleRing
+ |
+ |  RightHandPinkyIndex
+ |
+ |  RightHandPinkyMiddle
+ |
+ |  RightHandPinkyPinky
+ |
+ |  RightHandPinkyRing
+ |
+ |  RightHandRingIndex
+ |
+ |  RightHandRingMiddle
+ |
+ |  RightHandRingPinky
+ |
+ |  RightHandRingRing
+ |
+ |  RightKneeKillPitch
+ |
+ |  RollSolver
+ |
+ |  ShoulderCorrection
+ |
+ |  SyncMode
+ |
+ |  WriteReference
+ |
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |
+ |  ClassGroupName = ''
+ |
+ |  TypeInfo = 46
+ |
+ |  __instance_size__ = 88
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods inherited from FBConstraint:
+ |
+ |  AnimationNodeInCreate(...)
+ |      AnimationNodeInCreate( (FBConstraint)arg1, (object)arg2, (FBModel)arg3, (str)arg4) -> object
+ |
+ |  AnimationNodeOutCreate(...)
+ |      AnimationNodeOutCreate( (FBConstraint)arg1, (object)arg2, (FBModel)arg3, (str)arg4) -> object
+ |
+ |  DeformerBind(...)
+ |      DeformerBind( (FBConstraint)arg1, (FBModel)arg2) -> bool
+ |
+ |  DeformerUnBind(...)
+ |      DeformerUnBind( (FBConstraint)arg1, (FBModel)arg2) -> bool
+ |
+ |  Disable(...)
+ |      Disable( (FBConstraint)arg1, (FBModel)arg2) -> bool
+ |
+ |  FreezeSRT(...)
+ |      FreezeSRT( (FBConstraint)arg1, (FBModel)arg2, (object)arg3, (object)arg4, (object)arg5) -> None
+ |
+ |  FreezeSuggested(...)
+ |      FreezeSuggested( (FBConstraint)arg1) -> None
+ |
+ |  ReferenceAdd(...)
+ |      ReferenceAdd( (FBConstraint)arg1, (object)arg2, (FBModel)arg3) -> bool
+ |
+ |  ReferenceGet(...)
+ |      ReferenceGet( (FBConstraint)arg1, (object)arg2 [, (object)arg3]) -> object
+ |
+ |  ReferenceGetCount(...)
+ |      ReferenceGetCount( (FBConstraint)arg1, (object)arg2) -> int
+ |
+ |  ReferenceGroupAdd(...)
+ |      ReferenceGroupAdd( (FBConstraint)arg1, (str)arg2, (object)arg3) -> int
+ |
+ |  ReferenceGroupGetCount(...)
+ |      ReferenceGroupGetCount( (FBConstraint)arg1) -> int
+ |
+ |  ReferenceGroupGetMaxCount(...)
+ |      ReferenceGroupGetMaxCount( (FBConstraint)arg1, (object)arg2) -> int
+ |
+ |  ReferenceGroupGetName(...)
+ |      ReferenceGroupGetName( (FBConstraint)arg1, (object)arg2) -> str
+ |
+ |  ReferenceRemove(...)
+ |      ReferenceRemove( (FBConstraint)arg1, (object)arg2, (FBModel)arg3) -> bool
+ |
+ |  RemoveAllAnimationNodes(...)
+ |      RemoveAllAnimationNodes( (FBConstraint)arg1) -> None
+ |
+ |  RestoreModelState(...)
+ |      RestoreModelState( (FBConstraint)arg1, (FBModel)arg2) -> None
+ |
+ |  SaveModelState(...)
+ |      SaveModelState( (FBConstraint)arg1, (FBModel)arg2, (object)arg3, (object)arg4, (object)arg5) -> None
+ |
+ |  SetupAllAnimationNodes(...)
+ |      SetupAllAnimationNodes( (FBConstraint)arg1) -> None
+ |
+ |  Snap(...)
+ |      Snap( (FBConstraint)arg1) -> None
+ |
+ |  SnapSuggested(...)
+ |      SnapSuggested( (FBConstraint)arg1) -> None
+ |
+ |  __copy__(...)
+ |      __copy__( (FBConstraint)arg1) -> object
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from FBConstraint:
+ |
+ |  Active
+ |
+ |  Deformer
+ |
+ |  Description
+ |
+ |  HasLayout
+ |
+ |  Lock
+ |
+ |  Weight
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods inherited from FBBox:
+ |
+ |  AnimationNodeDestroy(...)
+ |      AnimationNodeDestroy( (FBBox)arg1, (FBAnimationNode)arg2) -> bool
+ |
+ |  AnimationNodeInGet(...)
+ |      AnimationNodeInGet( (FBBox)arg1) -> object
+ |
+ |  AnimationNodeIsUserData(...)
+ |      AnimationNodeIsUserData( (FBBox)arg1, (FBAnimationNode)arg2) -> bool
+ |
+ |  AnimationNodeOutGet(...)
+ |      AnimationNodeOutGet( (FBBox)arg1) -> object
+ |
+ |  GetInConnector(...)
+ |      GetInConnector( (FBBox)arg1, (object)arg2) -> object
+ |
+ |  GetInConnectorCount(...)
+ |      GetInConnectorCount( (FBBox)arg1) -> int
+ |
+ |  GetOutConnector(...)
+ |      GetOutConnector( (FBBox)arg1, (object)arg2) -> object
+ |
+ |  GetOutConnectorCount(...)
+ |      GetOutConnectorCount( (FBBox)arg1) -> int
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from FBBox:
+ |
+ |  Animatable
+ |
+ |  Live
+ |
+ |  RecordMode
+ |
+ |  UniqueName
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods inherited from FBComponent:
+ |
+ |  ClassName(...)
+ |      ClassName( (FBComponent)arg1) -> str
+ |
+ |  DisableObjectFlags(...)
+ |      DisableObjectFlags( (FBComponent)arg1, (FBObjectFlag)arg2) -> None
+ |
+ |  EnableObjectFlags(...)
+ |      EnableObjectFlags( (FBComponent)arg1, (FBObjectFlag)arg2) -> None
+ |
+ |  FBCreate(...)
+ |      FBCreate( (FBComponent)arg1) -> bool
+ |
+ |  FBDestroy(...)
+ |      FBDestroy( (FBComponent)arg1) -> None
+ |
+ |  GetObjectFlags(...)
+ |      GetObjectFlags( (FBComponent)arg1) -> FBObjectFlag
+ |
+ |  GetObjectStatus(...)
+ |      GetObjectStatus( (FBComponent)arg1, (FBObjectStatus)arg2) -> bool
+ |
+ |  GetOwnerFileReference(...)
+ |      GetOwnerFileReference( (FBComponent)arg1) -> object
+ |
+ |  HardSelect(...)
+ |      HardSelect( (FBComponent)arg1) -> None
+ |
+ |  HasObjectFlags(...)
+ |      HasObjectFlags( (FBComponent)arg1, (FBObjectFlag)arg2) -> bool
+ |
+ |  Is(...)
+ |      Is( (FBComponent)arg1, (object)arg2) -> bool
+ |
+ |  ProcessNamespaceHierarchy(...)
+ |      ProcessNamespaceHierarchy( (FBComponent)arg1, (FBNamespaceAction)arg2, (str)arg3 [, (str)arg4 [, (object)arg5]]) -> bool
+ |
+ |  ProcessObjectNamespace(...)
+ |      ProcessObjectNamespace( (FBComponent)arg1, (FBNamespaceAction)arg2, (str)arg3 [, (str)arg4 [, (object)arg5]]) -> bool
+ |
+ |  PropertyAdd(...)
+ |      PropertyAdd( (FBComponent)arg1, (FBProperty)arg2) -> int
+ |
+ |  PropertyAddReferenceProperty(...)
+ |      PropertyAddReferenceProperty( (FBComponent)arg1, (FBProperty)arg2) -> bool
+ |
+ |  PropertyCreate(...)
+ |      PropertyCreate( (FBComponent)arg1, (str)arg2, (FBPropertyType)arg3, (str)arg4, (object)arg5, (object)arg6, (FBProperty)arg7) -> object
+ |
+ |  PropertyGetModifiedList(...)
+ |      PropertyGetModifiedList( (FBComponent)arg1, (FBPlugModificationFlag)arg2) -> FBPropertyList
+ |
+ |  PropertyRemove(...)
+ |      PropertyRemove( (FBComponent)arg1, (FBProperty)arg2) -> None
+ |
+ |  SetObjectFlags(...)
+ |      SetObjectFlags( (FBComponent)arg1, (FBObjectFlag)arg2) -> None
+ |
+ |  SetObjectStatus(...)
+ |      SetObjectStatus( (FBComponent)arg1, (FBObjectStatus)arg2, (object)arg3) -> None
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from FBComponent:
+ |
+ |  Components
+ |
+ |  FullName
+ |
+ |  LongName
+ |
+ |  Name
+ |
+ |  OwnerNamespace
+ |
+ |  Parents
+ |
+ |  PropertyList
+ |
+ |  Selected
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods inherited from FBPlug:
+ |
+ |  BeginChange(...)
+ |      BeginChange( (FBPlug)arg1) -> bool
+ |
+ |  ConnectDst(...)
+ |      ConnectDst( (FBPlug)arg1, (FBPlug)arg2 [, (FBConnectionType)arg3]) -> bool
+ |
+ |  ConnectDstAt(...)
+ |      ConnectDstAt( (FBPlug)arg1, (object)arg2, (FBPlug)arg3 [, (FBConnectionType)arg4]) -> bool
+ |
+ |  ConnectSrc(...)
+ |      ConnectSrc( (FBPlug)arg1, (FBPlug)arg2 [, (FBConnectionType)arg3]) -> bool
+ |
+ |  ConnectSrcAt(...)
+ |      ConnectSrcAt( (FBPlug)arg1, (object)arg2, (FBPlug)arg3 [, (FBConnectionType)arg4]) -> bool
+ |
+ |  DisconnectAllDst(...)
+ |      DisconnectAllDst( (FBPlug)arg1) -> None
+ |
+ |  DisconnectAllSrc(...)
+ |      DisconnectAllSrc( (FBPlug)arg1) -> None
+ |
+ |  DisconnectDst(...)
+ |      DisconnectDst( (FBPlug)arg1, (FBPlug)arg2) -> bool
+ |
+ |  DisconnectDstAt(...)
+ |      DisconnectDstAt( (FBPlug)arg1, (object)arg2) -> bool
+ |
+ |  DisconnectSrc(...)
+ |      DisconnectSrc( (FBPlug)arg1, (FBPlug)arg2) -> bool
+ |
+ |  DisconnectSrcAt(...)
+ |      DisconnectSrcAt( (FBPlug)arg1, (object)arg2) -> bool
+ |
+ |  EndChange(...)
+ |      EndChange( (FBPlug)arg1) -> None
+ |
+ |  GetContentModified(...)
+ |      GetContentModified( (FBPlug)arg1, (FBPlugModificationFlag)arg2) -> bool
+ |
+ |  GetDst(...)
+ |      GetDst( (FBPlug)arg1, (object)arg2) -> object
+ |
+ |  GetDstCount(...)
+ |      GetDstCount( (FBPlug)arg1) -> int
+ |
+ |  GetDstType(...)
+ |      GetDstType( (FBPlug)arg1, (object)arg2) -> FBConnectionType
+ |
+ |  GetOwned(...)
+ |      GetOwned( (FBPlug)arg1, (object)arg2) -> object
+ |
+ |  GetOwnedCount(...)
+ |      GetOwnedCount( (FBPlug)arg1) -> int
+ |
+ |  GetOwner(...)
+ |      GetOwner( (FBPlug)arg1) -> object
+ |
+ |  GetPlugConnectionModifiedList(...)
+ |      GetPlugConnectionModifiedList( (FBPlug)arg1, (FBPlugList)arg2, (FBPlugModificationFlag)arg3, (object)arg4) -> int
+ |
+ |  GetSelfModified(...)
+ |      GetSelfModified( (FBPlug)arg1, (FBPlugModificationFlag)arg2) -> bool
+ |
+ |  GetSrc(...)
+ |      GetSrc( (FBPlug)arg1, (object)arg2) -> object
+ |
+ |  GetSrcCount(...)
+ |      GetSrcCount( (FBPlug)arg1) -> int
+ |
+ |  GetSrcType(...)
+ |      GetSrcType( (FBPlug)arg1, (object)arg2) -> FBConnectionType
+ |
+ |  GetStatusFlag(...)
+ |      GetStatusFlag( (FBPlug)arg1, (FBPlugStatusFlag)arg2) -> bool
+ |
+ |  IsSDKComponent(...)
+ |      IsSDKComponent( (FBPlug)arg1) -> bool
+ |
+ |  MoveSrcAt(...)
+ |      MoveSrcAt( (FBPlug)arg1, (object)arg2, (object)arg3) -> bool
+ |
+ |      MoveSrcAt( (FBPlug)arg1, (FBPlug)arg2, (FBPlug)arg3) -> bool
+ |
+ |  PrintClassDefinitions(...)
+ |      PrintClassDefinitions() -> None
+ |
+ |  ReplaceDstAt(...)
+ |      ReplaceDstAt( (FBPlug)arg1, (object)arg2, (FBPlug)arg3) -> bool
+ |
+ |  ReplaceSrcAt(...)
+ |      ReplaceSrcAt( (FBPlug)arg1, (object)arg2, (FBPlug)arg3) -> bool
+ |
+ |  RevertModification(...)
+ |      RevertModification( (FBPlug)arg1 [, (FBPlugModificationFlag)arg2]) -> bool
+ |
+ |  SetContentModified(...)
+ |      SetContentModified( (FBPlug)arg1, (FBPlugModificationFlag)arg2, (object)arg3) -> None
+ |
+ |  SetSelfModified(...)
+ |      SetSelfModified( (FBPlug)arg1, (FBPlugModificationFlag)arg2, (object)arg3) -> None
+ |
+ |  SetStatusFlag(...)
+ |      SetStatusFlag( (FBPlug)arg1, (FBPlugStatusFlag)arg2, (object)arg3) -> None
+ |
+ |  SwapSrc(...)
+ |      SwapSrc( (FBPlug)arg1, (object)arg2, (object)arg3) -> bool
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from FBPythonWrapper:
+ |
+ |  OnUnbind
+ |
+ |  ----------------------------------------------------------------------
+ |  Static methods inherited from Boost.Python.instance:
+ |
+ |  __new__(*args, **kwargs) from Boost.Python.class
+ |      Create and return a new object.  See help(type) for accurate signature.
+ |
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from Boost.Python.instance:
+ |
+ |  __dict__
+ |
+ |  __weakref__
