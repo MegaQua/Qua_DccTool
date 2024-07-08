@@ -10,7 +10,7 @@ elif maya_python_version == (3, 9, 7):
     subsyspath = 'S:\Public\qiu_yi\py397\Lib\site-packages'
 sys.path.insert(0, subsyspath)
 import io
-import os.path
+import os.pat
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
