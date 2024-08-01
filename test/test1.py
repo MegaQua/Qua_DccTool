@@ -1,27 +1,35 @@
-from pyfbsdk import *
+import re
 
-def Find_AnimationNode( pParent, pName ):
-    # Boxが指定された名前のノードを持っているかを調べる。
-    lResult = None
-    for lNode in pParent.Nodes:
-        if lNode.Name == pName:
-            lResult = lNode
-            break
-    return lResult
-def getConstraintsByName(constraintsName):
-    lConstraints = FBSystem().Scene.Constraints  # 获取当前场景中的所有约束列表
-    for each in lConstraints:  # 遍历场景中的所有约束
-        if each.Name == constraintsName:  # 检查约束名称是否匹配
-            return each  # 如果找到匹配的约束，立即返回它
+a = ['tentacle1_main_con', 'tentacle2_main_con', 'tentacle3_main_con', 'tentacle4_main_con', 'tentacle5_main_con', 'tentacle6_main_con',
+     'tentacle7_main_con', 'tentacle8_main_con', 'tentacle9_main_con', 'tentacle10_main_con', 'rig_JointEnd_con']
+b = ['tentacle1_main_con_Y', 'tentacle2_main_con_Y', 'tentacle3_main_con_Y', 'tentacle4_main_con_Y', 'tentacle5_main_con_Y', 'tentacle6_main_con_Y',
+     'tentacle7_main_con_Y', 'tentacle8_main_con_Y', 'tentacle9_main_con_Y', 'tentacle10_main_con_Y', 'rig_JointEnd_con_Y']
+c = ['tentacle1_main_con_Z', 'tentacle2_main_con_Z', 'tentacle3_main_con_Z', 'tentacle4_main_con_Z', 'tentacle5_main_con_Z', 'tentacle6_main_con_Z',
+     'tentacle7_main_con_Z', 'tentacle8_main_con_Z', 'tentacle9_main_con_Z', 'tentacle10_main_con_Z', 'rig_JointEnd_con_Z']
 
-    # 如果遍历完成后没有找到匹配的约束，则创建一个新的约束
-    return FBConstraintRelation(constraintsName)  # 创建一个新的约束并返回
+pattern = re.compile(r'tentacle(\d+)_main_con')
+
+a = [pattern.sub(r'rig_con \1', item) for item in a]
+b = [pattern.sub(r'rig_con \1', item) for item in b]
+c = [pattern.sub(r'rig_con \1', item) for item in c]
+
+x = "rig_Cons_curve"
+y ="rig_Cons_Y_curve"
+z ="rig_Cons_Z_curve"
+print(a)
+print(b)
+print(c)
 
 
-# 使用函数检查或创建名为"Relation test"的约束
-result = getConstraintsByName("Relation test")
 
-print(result)
-lMgr = FBConstraintManager()
-Path = lMgr.TypeCreateConstraint("Path")
-lRecever = result.ConstrainObject(Path)
+def aaaa(a, b):
+    curve=FBFindModelByLabelName(a)
+    obj_list=[]
+    for i in b:
+        obj_list.append(FBFindModelByLabelName(i))
+    for index, obj in enumerate(obj_list):
+        curve.PathKeySetControlNode(index, obj)
+
+aaaa(x,a)
+aaaa(y,b)
+aaaa(z,c)

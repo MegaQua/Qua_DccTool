@@ -41,6 +41,7 @@ class CameraTransferTool(QtWidgets.QWidget):
         self.step2_button.clicked.connect(self.step2)
 
         self.setLayout(layout)
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
         self.show()
 
     def populate_cameras(self):
@@ -150,6 +151,8 @@ class CameraTransferTool(QtWidgets.QWidget):
 
         FocusAngle = vcam.PropertyList.Find('FocusAngle')
         FocusAngle.SetAnimated(True)
+        FieldOfView = vcam.PropertyList.Find('FieldOfView')
+        FieldOfView.SetAnimated(True)
 
         Relation = FBConstraintRelation(vcam_name + "_Relation")
         Sender1 = Relation.SetAsSource(vcam)
