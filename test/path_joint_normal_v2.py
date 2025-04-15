@@ -4,10 +4,10 @@ from PySide2 import QtWidgets, QtGui, QtCore
 
 class MB_jointPath_tool(QtWidgets.QWidget):
     def __init__(self):
-        self.rootJoint = "ten1_1"
-        self.childRoot = "ten1_1"
+        self.GPJoint = "tentacleA1"
+        self.childRoot = ["tentacleABa_1","tentacleBBa_1","tentacleCBa_1","tentacleDBa_1","tentacleEBa_1","tentacleFBa_1"]
         self.name = "rig"
-        self.conNum = 16
+        self.conNum = 10
         self.MarkerSize = 1000
         self.Active = False
         #super().__init__()
@@ -772,22 +772,58 @@ class MB_jointPath_tool(QtWidgets.QWidget):
         self.Transformation_lock(Cons,"ryz,sx")
         #self.connectObjToCurve(Cons,PathCurve)
     def main(self):
-        rootJoints=self.rootJoint.split(',')
-        joints = self.collect_all_joints(rootJoints[0])
+        joints_base = self.collect_all_joints(self.GPJoint)
 
-        #joints_copy = self.create_dummys(joints, dummytype="copy")
-        #self.jointchain_parent(joints,joints_copy)
-        #joints_copy.append(self.createEndNull(joints_copy))
-        #for i in range(len(joints_copy) - 1):
-        #    joints_copy[i + 1].Parent = joints_copy[i]
+        jointsCons = self.create_dummys(joints_base, dummytype="jointCon", dummylook="HardCross")
+        self.jointchain_parent(joints_base, jointsCons)
 
-        #Cons_location = self.interpolate_between_first_and_last(joints_copy, self.conNum,nonlinear=False)
-        #Cons = self.create_dummys(Cons_location, dummytype="copy", name=self.name + "_con 1", dummylook="HardCross")
-        #Cons_offset = self.create_dummys(Cons)
-        #PathCurve = self.create_curve(Cons, "Con")
-        #JointPaths = self.createPathConstrain_s(joints_copy, PathCurve)
-        #Relation, mainPath = self.pathRolation(joints_copy, JointPaths)
-        #self.createChainAim(joints_copy)
+        jointsConsOffsets = self.create_dummys(jointsCons)
+        for i in range(1, len(jointsConsOffsets)):
+            jointsConsOffsets[i].Parent = jointsCons[i - 1]
+        end=self.createEndNull(joints_base)
+        end.Parent= jointsCons[-1]
+        joints_base.append(end)
+        jointsConsOffsets.append(end)
+
+        Cons = self.create_dummys(joints_base, dummytype="curveCon", dummylook="HardCross")
+        Cons_offset = self.create_dummys(Cons)
+
+        for i in range(1, len(Cons_offset)):
+            Cons_offset[i].Parent = Cons[i - 1]
+        PathCurve = self.create_curve(Cons, "Cons")
+
+
+        JointPaths = self.createPathConstrain_s(jointsConsOffsets, PathCurve)
+        self.pathRolation(jointsConsOffsets, JointPaths)
+        self.createChainAim(jointsConsOffsets)
+
+        curvename = PathCurve.Name
+        cvname = [obj.Name for obj in Cons if obj is not None]
+
+        def generate_connectObjToCurve_code(curve_name, obj_names):
+            code_template = """
+from pyfbsdk import *
+
+a = {obj_names}
+
+x = "{curve_name}"
+
+def connectObjToCurve(a, b):
+    curve = FBFindModelByLabelName(a)
+    obj_list = []
+    for i in b:
+        obj_list.append(FBFindModelByLabelName(i))
+    for index, obj in enumerate(obj_list):
+        curve.PathKeySetControlNode(index, obj)
+
+connectObjToCurve(x, a)
+        """
+            # 将列表和曲线名称插入到代码模板中
+            code = code_template.format(obj_names=obj_names, curve_name=curve_name)
+            print(code)
+
+        # 示例用法
+        generate_connectObjToCurve_code(curvename, cvname)
         """
         Y_Cons = self.create_dummys(Cons, dummytype="Y", offset=(0, 1, 0))
         for i in range(len(Cons)):
@@ -817,16 +853,17 @@ class MB_jointPath_tool(QtWidgets.QWidget):
 
         self.createChainAim(joints_copy, joints_copy_yoffset)
         self.createChainScale(joints_copy, joints_copy_yoffset,joints_copy_zoffset)
-
-        self.Transformation_lock(joints_copy)
-        self.Transformation_lock(Cons_offset)
-        self.Transformation_lock(joints_copy_yoffset)
-        self.Transformation_lock(joints_copy_zoffset)
-        self.Transformation_lock(Y_Cons)
-        self.Transformation_lock(Z_Cons)
-        self.Transformation_lock(Cons,"ryz,sx")
-        #self.connectObjToCurve(Cons,PathCurve)
         """
+        #self.Transformation_lock(joints_copy)
+        #self.Transformation_lock(Cons_offset)
+        #self.Transformation_lock(joints_copy_yoffset)
+        #self.Transformation_lock(joints_copy_zoffset)
+        #self.Transformation_lock(Y_Cons)
+        #self.Transformation_lock(Z_Cons)
+        #self.Transformation_lock(Cons,"ryz,sx")
+        #self.connectObjToCurve(Cons,PathCurve)
+        #print()
+
 
 
 main = MB_jointPath_tool()

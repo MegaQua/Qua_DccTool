@@ -4,10 +4,10 @@ from PySide2 import QtWidgets, QtGui, QtCore
 
 class MB_jointPath_tool(QtWidgets.QWidget):
     def __init__(self):
-        self.rootJoint = "ten1_1"
-        self.childRoot = "ten1_1"
+        self.GPJoint = "tentacle1"
+        self.childRoot = ["tentacleABa_1","tentacleBBa_1","tentacleCBa_1","tentacleDBa_1","tentacleEBa_1","tentacleFBa_1"]
         self.name = "rig"
-        self.conNum = 16
+        self.conNum = 10
         self.MarkerSize = 1000
         self.Active = False
         #super().__init__()
@@ -772,22 +772,70 @@ class MB_jointPath_tool(QtWidgets.QWidget):
         self.Transformation_lock(Cons,"ryz,sx")
         #self.connectObjToCurve(Cons,PathCurve)
     def main(self):
-        rootJoints=self.rootJoint.split(',')
-        joints = self.collect_all_joints(rootJoints[0])
+        joints_base = self.collect_all_joints(self.GPJoint)
 
-        #joints_copy = self.create_dummys(joints, dummytype="copy")
-        #self.jointchain_parent(joints,joints_copy)
-        #joints_copy.append(self.createEndNull(joints_copy))
-        #for i in range(len(joints_copy) - 1):
-        #    joints_copy[i + 1].Parent = joints_copy[i]
+        joints_base_copy = self.create_dummys(joints_base, dummytype="main")
 
-        #Cons_location = self.interpolate_between_first_and_last(joints_copy, self.conNum,nonlinear=False)
+        jointsChains=[]
+
+        for i in self.childRoot:
+            jointsChains.append(self.collect_all_joints(i))
+        #jointsCons = []
+
+        for jointsChain in jointsChains:
+            jointsCons = self.create_dummys(jointsChain, dummytype="con", dummylook="HardCross")
+
+            jointsConsOffsets=self.create_dummys(jointsCons)
+
+            self.jointchain_parent(jointsChain, jointsCons)
+
+            for i in range(1, len(jointsConsOffsets)):
+                jointsConsOffsets[i].Parent = jointsCons[i - 1]
+
+
+            self.jointchain_parent(jointsConsOffsets[:8]+ jointsConsOffsets[9:], joints_base_copy)
+            self.jointchain_parent([jointsConsOffsets[8]], [joints_base_copy[8]] )
+
+
+
+        joints_base_copy.append(self.createEndNull(joints_base_copy))
+
+        for i in range(len(joints_base_copy) - 1):
+            joints_base_copy[i + 1].Parent = joints_base_copy[i]
+
+        #Cons_location = self.interpolate_between_first_and_last(joints_base_copy, self.conNum,nonlinear=False)
         #Cons = self.create_dummys(Cons_location, dummytype="copy", name=self.name + "_con 1", dummylook="HardCross")
-        #Cons_offset = self.create_dummys(Cons)
-        #PathCurve = self.create_curve(Cons, "Con")
-        #JointPaths = self.createPathConstrain_s(joints_copy, PathCurve)
-        #Relation, mainPath = self.pathRolation(joints_copy, JointPaths)
-        #self.createChainAim(joints_copy)
+        Cons = self.create_dummys(joints_base_copy, dummytype="con", name=self.name + "_con 1", dummylook="HardCross")
+        Cons_offset = self.create_dummys(Cons)
+
+        PathCurve = self.create_curve(Cons, "Cons")
+
+        Y_Cons = self.create_dummys(Cons, dummytype="Y", offset=(0, 1, 0))
+        for i in range(len(Cons)):
+            Y_Cons[i].Parent = Cons[i]
+
+        Y_PathCurve = self.create_curve(Y_Cons, "Cons_Y")
+        joints_copy_yoffset = self.create_dummys(joints_base_copy, dummytype="Y", offset=(0, 1, 0), P=True)
+
+        Z_Cons = self.create_dummys(Cons, dummytype="Z", offset=(0, 0, 1))
+        for i in range(len(Cons)):
+            Z_Cons[i].Parent = Cons[i]
+        Z_PathCurve = self.create_curve(Z_Cons, "Cons_Z")
+        joints_copy_zoffset = self.create_dummys(joints_base_copy, dummytype="Z", offset=(0, 0, 1),P=True)
+
+
+        JointPaths = self.createPathConstrain_s(joints_base_copy, PathCurve)
+        Y_JointPaths = self.createPathConstrain_s(joints_copy_yoffset, Y_PathCurve)
+        Z_JointPaths = self.createPathConstrain_s(joints_copy_zoffset, Z_PathCurve)
+        Relation, mainPath = self.pathRolation(joints_base_copy, JointPaths)
+        _, Y_OffsetmainPath = self.pathRolation(joints_copy_yoffset, Y_JointPaths)
+        _, Z_OffsetmainPath = self.pathRolation(joints_copy_yoffset, Z_JointPaths)
+        self.warppathtogether(Relation, mainPath, Y_OffsetmainPath)
+        self.warppathtogether(Relation, mainPath, Z_OffsetmainPath)
+
+        self.createChainAim(joints_base_copy, joints_copy_yoffset)
+        self.createChainScale(joints_base_copy, joints_copy_yoffset,joints_copy_zoffset)
+
         """
         Y_Cons = self.create_dummys(Cons, dummytype="Y", offset=(0, 1, 0))
         for i in range(len(Cons)):
@@ -817,16 +865,17 @@ class MB_jointPath_tool(QtWidgets.QWidget):
 
         self.createChainAim(joints_copy, joints_copy_yoffset)
         self.createChainScale(joints_copy, joints_copy_yoffset,joints_copy_zoffset)
-
-        self.Transformation_lock(joints_copy)
-        self.Transformation_lock(Cons_offset)
-        self.Transformation_lock(joints_copy_yoffset)
-        self.Transformation_lock(joints_copy_zoffset)
-        self.Transformation_lock(Y_Cons)
-        self.Transformation_lock(Z_Cons)
-        self.Transformation_lock(Cons,"ryz,sx")
-        #self.connectObjToCurve(Cons,PathCurve)
         """
+        #self.Transformation_lock(joints_copy)
+        #self.Transformation_lock(Cons_offset)
+        #self.Transformation_lock(joints_copy_yoffset)
+        #self.Transformation_lock(joints_copy_zoffset)
+        #self.Transformation_lock(Y_Cons)
+        #self.Transformation_lock(Z_Cons)
+        #self.Transformation_lock(Cons,"ryz,sx")
+        #self.connectObjToCurve(Cons,PathCurve)
+        #print()
+
 
 
 main = MB_jointPath_tool()

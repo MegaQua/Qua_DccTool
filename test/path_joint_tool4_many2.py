@@ -771,6 +771,9 @@ class MB_jointPath_tool(QtWidgets.QWidget):
         self.Transformation_lock(Z_Cons)
         self.Transformation_lock(Cons,"ryz,sx")
         #self.connectObjToCurve(Cons,PathCurve)
+
+
+
     def main(self):
         rootJoints=self.rootJoint.split(',')
         joints = self.collect_all_joints(rootJoints[0])

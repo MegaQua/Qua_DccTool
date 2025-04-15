@@ -4,10 +4,11 @@ from PySide2 import QtWidgets, QtGui, QtCore
 
 class MB_jointPath_tool(QtWidgets.QWidget):
     def __init__(self):
-        self.rootJoint = "ten1_1"
-        self.childRoot = "ten1_1"
+        self.GPJoint = "tentacle1"
+        self.childRoot = ["tentacleABa_5","tentacleBBa_5","tentacleCBa_5","tentacleDBa_5","tentacleEBa_5","tentacleFBa_5"]
+        self.LineRoot = ["tentacleCenter1"]
         self.name = "rig"
-        self.conNum = 16
+        self.conNum = 10
         self.MarkerSize = 1000
         self.Active = False
         #super().__init__()
@@ -771,62 +772,122 @@ class MB_jointPath_tool(QtWidgets.QWidget):
         self.Transformation_lock(Z_Cons)
         self.Transformation_lock(Cons,"ryz,sx")
         #self.connectObjToCurve(Cons,PathCurve)
-    def main(self):
-        rootJoints=self.rootJoint.split(',')
-        joints = self.collect_all_joints(rootJoints[0])
 
-        #joints_copy = self.create_dummys(joints, dummytype="copy")
-        #self.jointchain_parent(joints,joints_copy)
-        #joints_copy.append(self.createEndNull(joints_copy))
-        #for i in range(len(joints_copy) - 1):
-        #    joints_copy[i + 1].Parent = joints_copy[i]
+    def generate_connectObjToCurve_code(self, curve_names, obj_names_list):
+        code_template = """
+from pyfbsdk import *
 
-        #Cons_location = self.interpolate_between_first_and_last(joints_copy, self.conNum,nonlinear=False)
-        #Cons = self.create_dummys(Cons_location, dummytype="copy", name=self.name + "_con 1", dummylook="HardCross")
-        #Cons_offset = self.create_dummys(Cons)
-        #PathCurve = self.create_curve(Cons, "Con")
-        #JointPaths = self.createPathConstrain_s(joints_copy, PathCurve)
-        #Relation, mainPath = self.pathRolation(joints_copy, JointPaths)
-        #self.createChainAim(joints_copy)
+def connectObjToCurve(curve_name, obj_names):
+    curve = FBFindModelByLabelName(curve_name)
+    obj_list = []
+    for name in obj_names:
+        obj = FBFindModelByLabelName(name)
+        if obj:
+            obj_list.append(obj)
+        else:
+            print(f"Object with name {{name}} not found.")
+    for index, obj in enumerate(obj_list):
+        curve.PathKeySetControlNode(index, obj)
+
+curve_names = {curve_names}
+obj_names_list = {obj_names_list}
+
+for curve_name, obj_names in zip(curve_names, obj_names_list):
+    connectObjToCurve(curve_name, obj_names)
         """
-        Y_Cons = self.create_dummys(Cons, dummytype="Y", offset=(0, 1, 0))
+        # 将曲线名称和对象名称列表插入到代码模板中
+        code = code_template.format(curve_names=repr(curve_names), obj_names_list=repr(obj_names_list))
+        print(code)
+
+    def main(self):
+        curve_names=[]
+        obj_names_list=[]
+
+        joints_base = self.collect_all_joints(self.GPJoint)
+        joints_base.append(self.createEndNull(joints_base))
+        joints_base[-1].Parent = joints_base[-2]
+
+        joints_chain = joints_base[:6] + joints_base[7:]
+
+        Cons = self.create_dummys(joints_chain, dummytype="con", name=self.name + "_con 1", dummylook="HardCross")
+        Cons_offset = self.create_dummys(Cons)
+
+        PathCurve = self.create_curve(Cons, "Cons")
+        curve_names.append(PathCurve.Name)
+        obj_names_list.append([obj.Name for obj in Cons if obj is not None])
+
+
+        Y_Cons = self.create_dummys(joints_chain, dummytype="Y", offset=(0, 1, 0))
         for i in range(len(Cons)):
             Y_Cons[i].Parent = Cons[i]
         Y_PathCurve = self.create_curve(Y_Cons, "Cons_Y")
-        joints_copy_yoffset = self.create_dummys(joints_copy, dummytype="Y", offset=(0, 1, 0),P=True)
-        for i in range(len(Cons)):
-            Y_Cons[i].Parent = None
-            self.create_parent(Y_Cons[i], Cons[i])
-        Z_Cons = self.create_dummys(Cons, dummytype="Z", offset=(0, 0, 1))
+        curve_names.append(Y_PathCurve.Name)
+        obj_names_list.append([obj.Name for obj in Y_Cons if obj is not None])
+        joints_copy_yoffset = self.create_dummys(joints_chain, dummytype="Y", offset=(0, 1, 0), P=True)
+
+        Z_Cons = self.create_dummys(joints_chain, dummytype="Z", offset=(0, 0, 1))
         for i in range(len(Cons)):
             Z_Cons[i].Parent = Cons[i]
         Z_PathCurve = self.create_curve(Z_Cons, "Cons_Z")
-        joints_copy_zoffset = self.create_dummys(joints_copy, dummytype="Z", offset=(0, 0, 1),P=True)
-        for i in range(len(Cons)):
-            Z_Cons[i].Parent = None
-            self.create_parent(Z_Cons[i], Cons[i])
-        JointPaths = self.createPathConstrain_s(joints_copy, PathCurve)
+        curve_names.append(Z_PathCurve.Name)
+        obj_names_list.append([obj.Name for obj in Z_Cons if obj is not None])
+        joints_copy_zoffset = self.create_dummys(joints_chain, dummytype="Z", offset=(0, 0, 1),P=True)
+
+        FKCons = self.create_dummys(joints_base, dummytype="FKcon", dummylook="HardCross")
+        FKCons_offset = self.create_dummys(FKCons)
+
+        for i in range(1, len(FKCons_offset)):
+            FKCons_offset[i].Parent = FKCons[i - 1]
+
+        JointPaths = self.createPathConstrain_s(FKCons_offset, PathCurve)
         Y_JointPaths = self.createPathConstrain_s(joints_copy_yoffset, Y_PathCurve)
         Z_JointPaths = self.createPathConstrain_s(joints_copy_zoffset, Z_PathCurve)
-
-        Relation, mainPath = self.pathRolation(joints_copy, JointPaths)
+        Relation, mainPath = self.pathRolation(FKCons_offset, JointPaths)
         _, Y_OffsetmainPath = self.pathRolation(joints_copy_yoffset, Y_JointPaths)
         _, Z_OffsetmainPath = self.pathRolation(joints_copy_yoffset, Z_JointPaths)
         self.warppathtogether(Relation, mainPath, Y_OffsetmainPath)
         self.warppathtogether(Relation, mainPath, Z_OffsetmainPath)
 
-        self.createChainAim(joints_copy, joints_copy_yoffset)
-        self.createChainScale(joints_copy, joints_copy_yoffset,joints_copy_zoffset)
+        self.createChainAim(FKCons_offset, joints_copy_yoffset)
+        self.createChainScale(FKCons_offset, joints_copy_yoffset,joints_copy_zoffset)
 
-        self.Transformation_lock(joints_copy)
-        self.Transformation_lock(Cons_offset)
-        self.Transformation_lock(joints_copy_yoffset)
-        self.Transformation_lock(joints_copy_zoffset)
-        self.Transformation_lock(Y_Cons)
-        self.Transformation_lock(Z_Cons)
-        self.Transformation_lock(Cons,"ryz,sx")
-        #self.connectObjToCurve(Cons,PathCurve)
-        """
+        jointsChains=[]
+
+        for i in self.childRoot:
+            jointsChains.append(self.collect_all_joints(i))
+        #jointsCons = []
+
+        CutParts = FKCons[4:11]
+        LineParts = FKCons[:4] + FKCons[10:]
+        OG = []
+        for jointsChain in jointsChains:
+            jointsCons = self.create_dummys(jointsChain, dummytype="JointCon", dummylook="HardCross")
+            jointsConsOffsets=self.create_dummys(jointsCons)
+            self.jointchain_parent(jointsChain, jointsCons)
+            for i in range(1, len(jointsConsOffsets)):
+                jointsConsOffsets[i].Parent = jointsCons[i - 1]
+            OG.append(jointsConsOffsets)
+            self.jointchain_parent(jointsConsOffsets,CutParts)
+            #self.jointchain_parent([jointsConsOffsets[8]], [joints_base_copy[8]] )
+
+        #self.jointchain_parent(jointsConsOffsets, LineParts)
+
+        jointslines = []
+        for i in self.LineRoot:
+            jointslines.append(self.collect_all_joints(i))
+
+        for jointsline in jointslines:
+            jointsCons = self.create_dummys(jointsline, dummytype="JointCon", dummylook="HardCross")
+            jointsConsOffsets=self.create_dummys(jointsCons)
+            self.jointchain_parent(jointsline, jointsCons)
+            for i in range(1, len(jointsConsOffsets)):
+                jointsConsOffsets[i].Parent = jointsCons[i - 1]
+            self.jointchain_parent(jointsConsOffsets,LineParts)
+
+        #for JF in OG:
+        #    self.jointchain_parent(JF, CutParts)
+        self.generate_connectObjToCurve_code(curve_names,obj_names_list)
+
 
 
 main = MB_jointPath_tool()

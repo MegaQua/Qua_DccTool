@@ -165,7 +165,7 @@ class PlayblastExporter(QtWidgets.QWidget):
         if not os.path.exists(os.path.dirname(self.output_folder_text.text())):
             os.makedirs(os.path.dirname(self.output_folder_text.text()))
         filename=self.filename_text.text()
-        file_format="jpg"
+        file_format="tif"
         pathname=self.output_folder_text.text()
         folder_name=os.path.basename(pathname)
         if self.suffix:

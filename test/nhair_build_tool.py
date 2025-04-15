@@ -154,7 +154,7 @@ def create_clusters_and_ctrls_for_curve(curve_name, ctrl_prefix):
 
 
 selected_joints = cmds.ls(selection=True, type='joint')
-prefix = "ep3skirtSim"
+prefix = "Sim"
 
 if selected_joints:
     duplicate_rename_joints(selected_joints, prefix)
