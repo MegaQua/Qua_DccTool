@@ -15,13 +15,11 @@
 
 ### Maya
 
-![Maya Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Maya_Logo.svg/1200px-Maya_Logo.svg.png)
 
 主要探索项目效率化以及特殊工具开发
 
 ### MotionBuilder
 
-![MotionBuilder Logo](https://upload.wikimedia.org/wikipedia/commons/3/3c/Autodesk_Motionbuilder_icon.png)
 
 效率工具
 
